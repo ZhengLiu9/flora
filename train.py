@@ -14,7 +14,7 @@
 #    limitations under the License.
 '''
 torchrun --standalone --nnodes=1 --nproc_per_node=1 train.py \
-    --model_name_or_path google/flan-t5-base \
+    --model_name_or_path google/flan-t5-small \
     --data_path ./alpaca_data.json \
     --bf16 False \
     --output_dir ./output \
@@ -43,6 +43,8 @@ import torch
 import transformers
 from torch.utils.data import Dataset
 from transformers import Trainer
+from peft import get_peft_config, get_peft_model, LoraConfig, TaskType, prepare_model_for_int8_training
+
 
 import utils
 
@@ -63,7 +65,6 @@ PROMPT_DICT = {
         "### Instruction:\n{instruction}\n\n### Response:"
     ),
 }
-
 
 @dataclass
 class ModelArguments:
@@ -219,6 +220,17 @@ def train():
         model_args.model_name_or_path,
         cache_dir=training_args.cache_dir,
     )
+    
+    peft_config = LoraConfig(
+        task_type=TaskType.SEQ_2_SEQ_LM, 
+        bias='none', 
+        r=8, 
+        lora_alpha=32, 
+        lora_dropout=0.1,
+        target_modules=["q","v"]
+    )
+    model = prepare_model_for_int8_training(model)
+    model = get_peft_model(model, peft_config)
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         model_args.model_name_or_path,
