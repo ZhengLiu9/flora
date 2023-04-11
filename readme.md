@@ -1,5 +1,5 @@
 # Instruct-finetuning Flan models with LoRA
-**F**lan finetuned by **LoRA**: This repo is based on [stanford_alpaca](https://github.com/tatsu-lab/stanford_alpaca), and served as the minimum codebase to instruct finetune flan models using LoRA and Alpaca's instruction datasets.
+**F**lan finetuned by **LoRA**: This repo is based on [stanford_alpaca](https://github.com/tatsu-lab/stanford_alpaca), and served as the minimum codebase to instruct finetune [FLAN](https://huggingface.co/docs/transformers/model_doc/flan-t5) models using [LoRA](https://arxiv.org/pdf/2106.09685.pdf) and Alpaca's instruction datasets.
 
 - `alpaca_data.json`: Downloaded from https://github.com/tatsu-lab/stanford_alpaca/blob/main/alpaca_data.json.
 - `requirements.txt`: Python depdendencies
